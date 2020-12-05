@@ -10,7 +10,7 @@ WORKDIR /app
 
 COPY ["Pipfile", "Pipfile.lock", "./"]
 
-RUN pipenv install --deploy --system --skip-lock && rm -rf /root/.cache
+RUN pipenv install --deploy --system && rm -rf /root/.cache
 
 RUN mkdir -p model
 COPY [".env.docker", "./.env"]
