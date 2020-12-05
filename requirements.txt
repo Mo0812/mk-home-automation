@@ -5,3 +5,4 @@ flask
 gunicorn
 scikit-learn
 xgboost
+python-dotenv

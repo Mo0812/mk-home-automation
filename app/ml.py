@@ -3,9 +3,14 @@ import xgboost as xgb
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.model_selection import train_test_split
 import pandas as pd
+from dotenv import load_dotenv
 import os
 
-with open("app/model/gb-model.bin", "rb") as f_in:
+load_dotenv()
+
+model_path = os.getenv("MODEL_PATH")
+
+with open(model_path + "/gb-model.bin", "rb") as f_in:
     model, dv = pickle.load(f_in)
 
 
@@ -17,12 +22,13 @@ def predict(data):
 
 
 def load_model(filename):
-    with open("app/model/" + filename, "rb") as f_in:
+    with open(model_path + "/" + filename, "rb") as f_in:
+        print("new modal loaded")
         model, dv = pickle.load(f_in)
 
 
 def save_model(filename, model, dv):
-    with open("app/model/" + filename, "wb") as f_out:
+    with open(model_path + "/" + filename, "wb") as f_out:
         pickle.dump((model, dv), f_out)
 
 
@@ -121,6 +127,6 @@ def fit(csv):
 
 def refit(csv):
     new_model, new_dv = fit(csv)
-    os.rename("app/model/gb-model.bin", "app/model/gb-model.prev.bin")
+    os.rename(model_path + "/gb-model.bin", model_path + "/gb-model.prev.bin")
     save_model("gb-model.bin", new_model, new_dv)
     load_model("gb-model.bin")
