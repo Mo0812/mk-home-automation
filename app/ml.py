@@ -3,6 +3,7 @@ import xgboost as xgb
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.model_selection import train_test_split
 import pandas as pd
+import os
 
 with open("app/model/gb-model.bin", "rb") as f_in:
     model, dv = pickle.load(f_in)
@@ -15,13 +16,13 @@ def predict(data):
     return prediction[0], prediction[0] >= 0.5
 
 
-def load_model():
-    with open("app/model/gb-model.bin", "rb") as f_in:
+def load_model(filename):
+    with open("app/model/" + filename, "rb") as f_in:
         model, dv = pickle.load(f_in)
 
 
-def save_model(model, dv):
-    with open("app/model/gb-model.bin", "wb") as f_out:
+def save_model(filename, model, dv):
+    with open("app/model/" + filename, "wb") as f_out:
         pickle.dump((model, dv), f_out)
 
 
@@ -87,7 +88,8 @@ def _prepare_data(df):
     return df
 
 
-def fit_model(df):
+def fit(csv):
+    df = pd.read_csv(csv)
     df = _prepare_data(df)
     df_train_full, df_test = train_test_split(
         df, test_size=0.2, random_state=11)
@@ -115,3 +117,10 @@ def fit_model(df):
     model = xgb.train(xgb_params, dtrain_full_onoff, num_boost_round=490)
 
     return model, dv_full
+
+
+def refit(csv):
+    new_model, new_dv = fit(csv)
+    os.rename("app/model/gb-model.bin", "app/model/gb-model.prev.bin")
+    save_model("gb-model.bin", new_model, new_dv)
+    load_model("gb-model.bin")

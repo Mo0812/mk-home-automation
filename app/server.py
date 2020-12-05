@@ -1,4 +1,4 @@
-import model
+import ml as model
 from flask import Flask, request, jsonify
 
 app = Flask('mkha')
@@ -13,6 +13,17 @@ def predict():
     result = {
         'onoff_probability': float(prediction),
         'onoff': bool(onoff)
+    }
+
+    return jsonify(result)
+
+
+@app.route('/fit', methods=['POST'])
+def fit():
+    csv = request.files["file"]
+    model.refit(csv)
+    result = {
+        "success": True
     }
 
     return jsonify(result)
