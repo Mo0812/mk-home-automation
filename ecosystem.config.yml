@@ -1,6 +1,8 @@
 apps:
   - script: "pipenv"
-    args: "run gunicorn --bind 0.0.0.0:9090 --pythonpath 'app/' server:app"
+    args: "run gunicorn --bind 0.0.0.0:9090 --pythonpath 'app' server:app"
     name: "mkha"
     instances: 1
     watch: true
+    log_date_format: "YYYY-MM-DD HH:mm Z"
+    combine_logs: true
