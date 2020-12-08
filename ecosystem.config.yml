@@ -1,6 +1,7 @@
 apps:
-  - script: "pipenv"
-    args: "run gunicorn --bind 0.0.0.0:9090 --pythonpath 'app' server:app"
+  - script: "/bin/bash"
+    args:
+      ["-c", "run gunicorn --bind 0.0.0.0:9090 --pythonpath 'app' server:app"]
     name: "mkha"
     instances: 1
     watch: false
