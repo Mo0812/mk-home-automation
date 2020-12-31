@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from dotenv import load_dotenv
 import os
+import datetime
 
 load_dotenv()
 
@@ -14,7 +15,20 @@ with open(model_path + "/gb-model.bin", "rb") as f_in:
     model, dv = pickle.load(f_in)
 
 
+def round_input_time(time):
+    time_split = time.split(":")
+    hour = int(time_split[0])
+    minute = int(time_split[1])
+    now = datetime.datetime.now()
+    dt = datetime.datetime(now.year, now.month, now.day, hour, minute, 0)
+    rdt = pd.Series(dt).dt.round("15min")
+    cdt = rdt[0]
+    return "%02d:%02d" % (cdt.hour, cdt.minute)
+
+
 def predict(data):
+    data["time"] = round_input_time(data["time"])
+    print(data)
     X_data = dv.transform([data])
     ddata = xgb.DMatrix(X_data, feature_names=dv.feature_names_)
     prediction = model.predict(ddata)
