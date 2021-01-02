@@ -4,7 +4,7 @@
 
 It uses the tracked data of the `TradfriDataCollection` module of `mk-home-server` to do so. And trains a gradient boost model based on your own behavior of switching your connected lights in your home.
 
-While this service alone only supports the training and prediction of light states for specific weekday/daytime combinations, the `Automator` module of `mh-home-server` enables to automatically control lights based on the prediction of this project in different modes.
+While this service alone only supports the training and prediction of light states for specific weekday/daytime combinations, the `Automator` module of *mk-home-server* enables to automatically control lights based on the prediction of this project in different modes.
 
 To learn more about how *mk-home-automation* works look at section X of this README.
 
@@ -19,10 +19,11 @@ To learn more about how to use the automation functions in combination with `mk-
 - pipenv
 - pm2
 - Docker
+- Jupyter
 
 ## Run the project
 
-There are different options to run this project. While it is created to work natively with a python environment on raspberry pi, it is also possible to use it with pm2, Docker or directly on your system in combination with pipenv.
+There are different options to run this project. While it is created to work natively with a python environment on raspberry pi, it is also possible to use it with [pm2](https://github.com/Unitech/pm2), Docker or directly on your system in combination with [pipenv](https://github.com/pypa/pipenv).
 
 To discover or enhance the base machine learning model and data aggregation you also can use the attached [jupyter notebook](jupyter/mk-home-automation.ipynb) in this repository. The important data modelation, and feature optimization used in the application code is originated there.
 
