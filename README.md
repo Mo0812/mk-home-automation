@@ -29,7 +29,7 @@ To discover or enhance the base machine learning model and data aggregation you 
 
 ### Production
 
-Because the training and prediction functionality of this project is encapsulated in a REST API (using Flask), it is recommended to use [gunicorn]() to run it reliable and safe in production. This purpose is already included into the pm2 and Docker setup shown below.
+Because the training and prediction functionality of this project is encapsulated in a REST API (using Flask), it is recommended to use [gunicorn](https://github.com/benoitc/gunicorn) to run it reliable and safe in production. This purpose is already included into the pm2 and Docker setup shown below.
 
 #### pm2
 
@@ -112,3 +112,38 @@ jupyter notebook
 ## Configuration
 
 For now all configuration for the project is maintained in `.env` files. For development and production use the [.env](.env) file, for the docker setup use the [.env.docker](.env.docker) file.
+
+## Use the project
+
+The functionality of training the tracked light interactions from *mk-home-server* or predicting the on/off state of a specific light at a concrete weekday/daytime combination is exposed through an REST API by the application.
+
+To use it there are two routes integrated in the service which are accessible by everyone who can connect to this service.
+
+### Train the model
+
+To train the model use the `/train` route of the API with a *POST* request and an attached csv file with all the light interaction data comes from the *mk-home-server* application.
+
+After training a new model based on the input data, the created model get saved in the file system to reuse it later on.
+
+### Predict a light state
+
+To predict a light state of specific light at a provided weekday/daytime combination use the `/predict` route with a *POST* request.
+
+You also need to provide the needed information through a JSON body attached to the request.
+That information must have the following form:
+
+```
+{
+    "instanceid": 65537,
+    "type": 2,
+    "weekday": "Thursday",
+    "time": "16:23"
+}
+```
+
+| Option | Value |
+| - | - |
+| instanceid | *The ID of the light for which the prediction should be made* |
+| type | *The internal type of device (2 stands for a light bulb)* |
+| weekday | *The weekday for which the prediction should be made. Here the english weekday names are used with a captial letter at the beginning* |
+| time | *The time for which the prediction should be made. Here the time is provided in a 24 hour format according to `HH:mm`* |
